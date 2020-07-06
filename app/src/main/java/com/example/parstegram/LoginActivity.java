@@ -36,6 +36,28 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser user = new ParseUser();
+
+                user.setUsername(etUsername.getText().toString());
+                user.setPassword(etPassword.getText().toString());
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null){
+                            Log.e(TAG, "Issue with sign up", e);
+                            return;
+                        }
+                        else{
+                            etPassword.setText("");
+                            etUsername.setText("");
+                        }
+                    }
+                });
+            }
+        });
 
 
         // Login Level
