@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.parstegram.fragments.ComposeFragment;
 import com.example.parstegram.fragments.PostsFragment;
+import com.example.parstegram.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -49,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
     public final String APP_TAG = "MyCustomApp";
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_profile:
                     default:
-                        fragment = new ComposeFragment();
+                        fragment = new ProfileFragment();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
@@ -84,19 +93,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
 
-        // Sign Out Feature
-        btnSignOut = findViewById(R.id.BtnSignOut);
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
+
     }
 
 
 
-    private void logout() {
+    public void logout(MenuItem mi) {
         ParseUser.logOut();
         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(i);
