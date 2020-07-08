@@ -1,5 +1,6 @@
 package com.example.parstegram;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -26,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ActionBar bar = getSupportActionBar();
+        bar.hide();
 
         if (ParseUser.getCurrentUser() != null){
             goMainActivity();
