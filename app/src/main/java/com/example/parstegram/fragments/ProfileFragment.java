@@ -2,6 +2,8 @@ package com.example.parstegram.fragments;
 
 import android.util.Log;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import com.example.parstegram.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -15,6 +17,8 @@ public class ProfileFragment extends PostsFragment {
 
 
     protected void queryPosts() {
+
+        //rvPosts.setLayoutManager(new GridLayoutManager(getContext(),3));
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());

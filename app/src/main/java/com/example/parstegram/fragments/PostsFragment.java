@@ -28,7 +28,7 @@ import java.util.List;
 
 public class PostsFragment extends Fragment {
 
-    private RecyclerView rvPosts;
+    protected RecyclerView rvPosts;
     public static final String TAG = "PostsFragment";
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
