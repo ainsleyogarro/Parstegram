@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.parstegram.EndlessRecyclerViewScrollListener;
 import com.example.parstegram.Post;
 import com.example.parstegram.PostsAdapter;
 import com.example.parstegram.R;
@@ -31,7 +32,8 @@ public class PostsFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
-    private SwipeRefreshLayout swipeCotainer;
+    protected SwipeRefreshLayout swipeCotainer;
+    protected EndlessRecyclerViewScrollListener scrollListener;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -61,7 +63,8 @@ public class PostsFragment extends Fragment {
 
         rvPosts.setAdapter(adapter);
 
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(linearLayoutManager);
         adapter = new PostsAdapter(getContext(), allPosts);
 
         rvPosts.setAdapter(adapter);
@@ -75,6 +78,8 @@ public class PostsFragment extends Fragment {
 
             }
         });
+
+
     }
 
     protected void queryPosts() {

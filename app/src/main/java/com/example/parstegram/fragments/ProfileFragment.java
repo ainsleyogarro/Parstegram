@@ -33,5 +33,6 @@ public class ProfileFragment extends PostsFragment {
                 adapter.notifyDataSetChanged();
             }
         });
+        swipeCotainer.setRefreshing(false);
     }
 }
