@@ -80,13 +80,22 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.action_compose:
                         fragment = new ComposeFragment();
+                        menuItem.setIcon(R.drawable.instagram_new_post_filled_24);
+                        bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.instagram_home_outline_24);
+                        bottomNavigationView.getMenu().getItem(2).setIcon(R.drawable.instagram_user_outline_24);
                         break;
                     case R.id.action_home:
                         fragment = new PostsFragment();
+                        menuItem.setIcon(R.drawable.instagram_home_filled_24);
+                        bottomNavigationView.getMenu().getItem(1).setIcon(R.drawable.instagram_new_post_outline_24);
+                        bottomNavigationView.getMenu().getItem(2).setIcon(R.drawable.instagram_user_outline_24);
                         break;
                     case R.id.action_profile:
                     default:
                         fragment = new ProfileFragment();
+                        menuItem.setIcon(R.drawable.instagram_user_filled_24);
+                        bottomNavigationView.getMenu().getItem(1).setIcon(R.drawable.instagram_new_post_outline_24);
+                        bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.instagram_home_outline_24);
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
