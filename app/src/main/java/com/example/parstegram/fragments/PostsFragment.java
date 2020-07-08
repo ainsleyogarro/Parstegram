@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class PostsFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
+    private SwipeRefreshLayout swipeCotainer;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -50,6 +52,10 @@ public class PostsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        swipeCotainer = view.findViewById(R.id.swipeContainer);
+
+
         rvPosts = view.findViewById(R.id.rvPosts);
         allPosts = new ArrayList<>();
 
@@ -60,6 +66,15 @@ public class PostsFragment extends Fragment {
 
         rvPosts.setAdapter(adapter);
         queryPosts();
+
+        swipeCotainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                queryPosts();
+
+            }
+        });
     }
 
     protected void queryPosts() {
@@ -78,6 +93,7 @@ public class PostsFragment extends Fragment {
                 }
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
+                swipeCotainer.setRefreshing(false);
             }
         });
     }
