@@ -1,7 +1,9 @@
 package com.example.parstegram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
+import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.parceler.Parcels;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,7 +24,7 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private Context context;
-    private List<Post> posts;
+    protected List<Post> posts;
 
     public PostsAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -64,7 +68,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivImage;
         private TextView tvTimestamp;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvUsername = itemView.findViewById(R.id.tvUsername);
@@ -74,6 +78,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     tvTimestamp.setVisibility(View.VISIBLE);
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("post",Parcels.wrap(posts.get(getAdapterPosition())));
+                    context.startActivity(intent);
                 }
             });
         }
