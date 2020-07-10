@@ -61,9 +61,11 @@ public class DetailActivity extends AppCompatActivity {
         rvComments = findViewById(R.id.rvComments);
         rvComments.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvComments.setAdapter(adapter);
-        //queryComments();
+        queryComments();
 
         etComments = findViewById(R.id.etComment);
+
+
 
         btnSbumit = findViewById(R.id.btnCommentSubmit);
         btnSbumit.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +107,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void queryComments() {
 
         //rvPosts.setLayoutManager(new GridLayoutManager(getContext(),3));
+        ParseObject.registerSubclass(Comments.class);
         ParseQuery<Comments> query = ParseQuery.getQuery(Comments.class);
         query.include(Comments.KEY_POST);
         query.whereEqualTo(Comments.KEY_POST, post);
@@ -117,7 +120,7 @@ public class DetailActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with getting posts", e);
                 }
                 for (Comments comment:comments) {
-                    Log.i(TAG, "Comments: " + comment.getKeyText() + ", username: " + comment.getUser().getUsername());
+                    //Log.i(TAG, "Comments: " + comment.getKeyText() + ", username: " + comment.getUser().getUsername());
                 }
                 allComments.addAll(comments);
                 adapter.notifyDataSetChanged();
