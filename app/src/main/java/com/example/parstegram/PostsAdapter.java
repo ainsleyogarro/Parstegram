@@ -77,7 +77,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tvTimestamp.setVisibility(View.VISIBLE);
+                    //tvTimestamp.setVisibility(View.VISIBLE);
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("post",Parcels.wrap(posts.get(getAdapterPosition())));
                     context.startActivity(intent);
@@ -92,9 +92,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (post.getImage() != null) {
                 Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             }
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-            String strDate = dateFormat.format(post.getCreatedAt());
-            tvTimestamp.setText(strDate);
+           // DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            //String strDate = dateFormat.format(post.getCreatedAt());
+            //tvTimestamp.setText(strDate);
         }
     }
 }

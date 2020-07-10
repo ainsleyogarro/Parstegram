@@ -22,7 +22,6 @@ public class Post extends ParseObject  {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_KEY = "createdAt";
-    public static final String KEY_COMMENTS = "comments";
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -48,6 +47,7 @@ public class Post extends ParseObject  {
         put(KEY_USER, parseUser);
     }
 
+    /*
     public List<Comments> getComments(){
         return getList("comments");
     }
@@ -60,7 +60,7 @@ public class Post extends ParseObject  {
         getList("comments").remove(position);
 
     }
-
+*/
 
 
 

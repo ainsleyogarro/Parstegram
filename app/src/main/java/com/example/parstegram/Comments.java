@@ -13,6 +13,7 @@ public class Comments extends ParseObject {
     public static final String KEY_USER = "Author";
     public static final String KEY_TEXT = "Text";
     public static final String KEY__CREATED_KEY = "createdAt";
+    public static final String KEY_POST = "Post";
 
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
@@ -29,4 +30,14 @@ public class Comments extends ParseObject {
     public void setKeyText(String text){
         put(KEY_TEXT,text);
     }
+
+    public Post getPost() {
+        return (Post) getParseObject(KEY_POST);
+
+    }
+
+    public void setKeyPost(Post post){
+        put(KEY_POST, post);
+    }
+
 }
