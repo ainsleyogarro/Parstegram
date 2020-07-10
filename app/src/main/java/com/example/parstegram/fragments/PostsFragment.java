@@ -34,6 +34,7 @@ public class PostsFragment extends Fragment {
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeCotainer;
     protected EndlessRecyclerViewScrollListener scrollListener;
+    private int Limit = 2;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -68,24 +69,38 @@ public class PostsFragment extends Fragment {
         adapter = new PostsAdapter(getContext(), allPosts);
 
         rvPosts.setAdapter(adapter);
-        queryPosts();
+        queryPosts(false);
 
         swipeCotainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 adapter.clear();
-                queryPosts();
+                queryPosts(false);
 
+            }
+        });
+
+        // Endless Scroller
+        rvPosts.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryPosts(true);
             }
         });
 
 
     }
 
-    protected void queryPosts() {
+    protected void queryPosts(boolean load) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+
         query.include(Post.KEY_USER);
-        query.setLimit(20);
+        // Used when not on initial page
+        if (load){
+            query.setSkip(Limit);
+            Limit += Limit;
+        }
+        query.setLimit(Limit);
         query.addDescendingOrder(Post.KEY_CREATED_KEY);
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -95,8 +110,11 @@ public class PostsFragment extends Fragment {
                 }
                 for (Post post:posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                    if (!allPosts.contains(post)) {
+                        allPosts.add(post);
+                    }
                 }
-                allPosts.addAll(posts);
+
                 adapter.notifyDataSetChanged();
                 swipeCotainer.setRefreshing(false);
             }
