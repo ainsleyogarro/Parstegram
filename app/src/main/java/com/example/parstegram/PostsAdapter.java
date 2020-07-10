@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Parcel;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -67,10 +71,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvDescription;
         private ImageView ivImage;
         private ImageView ivProfile;
+        private Button profileButton;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            profileButton = itemView.findViewById(R.id.profileButton);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
             ivProfile = itemView.findViewById(R.id.ivProfile);
@@ -85,17 +91,27 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             });
         }
 
-        public void bind(Post post) {
+        public void bind(final Post post) {
             // Bind the post data to the view elements
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            profileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ParseUser.getCurrentUser().put("Picture", post.getImage());
+                    try {
+                        ParseUser.getCurrentUser().save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i("Picture", ParseUser.getCurrentUser().getParseFile("Picture").getUrl());
+                }
+            });
             if (post.getImage() != null) {
                 Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             }
             Glide.with(context).load(post.getUser().getParseFile("Picture").getUrl()).into(ivProfile);
-           // DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-            //String strDate = dateFormat.format(post.getCreatedAt());
-            //tvTimestamp.setText(strDate);
+
         }
     }
 }
