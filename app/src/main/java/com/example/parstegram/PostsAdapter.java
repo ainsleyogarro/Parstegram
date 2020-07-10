@@ -66,14 +66,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUsername;
         private TextView tvDescription;
         private ImageView ivImage;
-        private TextView tvTimestamp;
+        private ImageView ivProfile;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
-            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            ivProfile = itemView.findViewById(R.id.ivProfile);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -92,6 +92,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (post.getImage() != null) {
                 Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             }
+            Glide.with(context).load(post.getUser().getParseFile("Picture").getUrl()).into(ivProfile);
            // DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
             //String strDate = dateFormat.format(post.getCreatedAt());
             //tvTimestamp.setText(strDate);
