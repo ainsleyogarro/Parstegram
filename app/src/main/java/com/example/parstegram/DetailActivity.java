@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,10 +27,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
     protected RecyclerView rvComments;
-    public static final String TAG = "DetailsFragment";
+    public static final String TAG = "DetailsActivity";
     protected CommentAdapter adapter;
     protected List<Comments> allComments;
     private Button btnSbumit;
@@ -50,9 +52,9 @@ public class DetailActivity extends AppCompatActivity {
         tvCaption = findViewById(R.id.tvCaption);
         tvCreatedAt = findViewById(R.id.tvCreatedAt);
         tvCaption.setText(post.getDescription());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String strDate = dateFormat.format(post.getCreatedAt());
-        tvCreatedAt.setText(strDate);
+        //DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = getRelativeDate(post.getCreatedAt().toString());
+        tvCreatedAt.setText("Posted at " + strDate);
 
         allComments = new ArrayList<>();
 
@@ -71,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
         btnSbumit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //generateComment(etComments.getText().toString());
+                generateComment(etComments.getText().toString());
             }
         });
 
@@ -80,11 +82,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private void generateComment(String commentText) {
 
-
+        // Create comment
         final Comments newComment = new Comments();
         newComment.setKeyText(commentText);
         newComment.setUser(ParseUser.getCurrentUser());
         newComment.setKeyPost(post);
+
+        // Save to ParseServer
         newComment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -93,6 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i(TAG, "Comment save was successful!!");
+                    // Add to view
                     etComments.setText("");
                     allComments.add(newComment);
                     adapter.notifyDataSetChanged();
@@ -103,13 +108,32 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
+    public static String getRelativeDate(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
+    }
 
     protected void queryComments() {
 
         //rvPosts.setLayoutManager(new GridLayoutManager(getContext(),3));
+        // Get all the commments
         ParseObject.registerSubclass(Comments.class);
         ParseQuery<Comments> query = ParseQuery.getQuery(Comments.class);
         query.include(Comments.KEY_POST);
+
+        // Filter out comments for specific posts
         query.whereEqualTo(Comments.KEY_POST, post);
         query.setLimit(20);
         query.addDescendingOrder(Comments.KEY__CREATED_KEY);
@@ -120,10 +144,16 @@ public class DetailActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with getting posts", e);
                 }
                 for (Comments comment:comments) {
-                    //Log.i(TAG, "Comments: " + comment.getKeyText() + ", username: " + comment.getUser().getUsername());
+                    try {
+                        Log.i(TAG, "Comments: " + comment.getKeyText() + ", username: " + comment.getUser().fetchIfNeeded().getUsername());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+                // Add comments to view
                 allComments.addAll(comments);
                 adapter.notifyDataSetChanged();
+                Log.i(TAG, adapter.getItemCount() + " ");
             }
         });
 

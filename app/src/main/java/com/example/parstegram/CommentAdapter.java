@@ -48,7 +48,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        EditText etCommentText;
+
 
         TextView tvCommentText;
         TextView tvUsernameText;

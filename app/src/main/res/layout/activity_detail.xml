@@ -22,9 +22,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:layout_below="@+id/tvCreatedAt"/>
+        android:layout_height="424dp"
+        android:layout_below="@+id/tvCreatedAt" />
 
     <EditText
         android:layout_width="match_parent"
