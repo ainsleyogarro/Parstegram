@@ -16,13 +16,17 @@ public class ProfileFragment extends PostsFragment {
 
 
 
-    protected void queryPosts() {
+    protected void queryPosts(boolean load) {
 
         //rvPosts.setLayoutManager(new GridLayoutManager(getContext(),3));
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        query.setLimit(20);
+        if (load){
+            query.setSkip(Limit);
+            Limit += Limit;
+        }
+        query.setLimit(Limit);
         query.addDescendingOrder(Post.KEY_CREATED_KEY);
         query.findInBackground(new FindCallback<Post>() {
             @Override

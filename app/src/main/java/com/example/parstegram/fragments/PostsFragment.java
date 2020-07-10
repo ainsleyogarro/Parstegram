@@ -34,7 +34,7 @@ public class PostsFragment extends Fragment {
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeCotainer;
     protected EndlessRecyclerViewScrollListener scrollListener;
-    private int Limit = 2;
+    protected int Limit = 2;
 
     public PostsFragment() {
         // Required empty public constructor
