@@ -72,6 +72,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivImage;
         private ImageView ivProfile;
         private Button profileButton;
+        private TextView tvTimestamp;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -80,6 +81,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
             ivProfile = itemView.findViewById(R.id.ivProfile);
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -95,6 +97,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             // Bind the post data to the view elements
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            tvTimestamp.setText("Made " + DetailActivity.getRelativeDate(post.getCreatedAt().toString()));
             profileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
